@@ -4,10 +4,15 @@ import {
   CreateDateColumn,
   Entity,
   Generated,
+  JoinColumn,
+  OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   VersionColumn,
 } from 'typeorm';
+import { ProfileModel } from './profile.entity';
+import { PostModel } from './posts.entity';
 
 export enum Role {
   USER = 'user',
@@ -24,17 +29,20 @@ export class UserModel {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({
-    type: 'varchar',
-    name: 'title',
-    length: 30,
-    nullable: true,
-    update: false,
-    select: false,
-    default: 'default value',
-    unique: false,
-  })
-  title: string;
+  @Column()
+  email: string;
+
+  //   @Column({
+  //     type: 'varchar',
+  //     name: 'title',
+  //     length: 30,
+  //     nullable: true,
+  //     update: false,
+  //     select: false,
+  //     default: 'default value',
+  //     unique: false,
+  //   })
+  //   title: string;
 
   @Column({
     type: 'enum',
@@ -58,4 +66,11 @@ export class UserModel {
   @Column()
   @Generated('uuid')
   additionalId: string;
-} //
+
+  @OneToOne(() => ProfileModel, (profile) => profile.user)
+  @JoinColumn()
+  profile: ProfileModel;
+
+  @OneToMany(() => PostModel, (post) => post.author)
+  posts: PostModel[];
+}
