@@ -1,3 +1,4 @@
+import e from 'express';
 import {
   Column,
   CreateDateColumn,
@@ -7,6 +8,11 @@ import {
   UpdateDateColumn,
   VersionColumn,
 } from 'typeorm';
+
+export enum Role {
+  USER = 'user',
+  ADMIN = 'admin',
+}
 
 @Entity()
 export class UserModel {
@@ -30,6 +36,12 @@ export class UserModel {
   })
   title: string;
 
+  @Column({
+    type: 'enum',
+    enum: Role,
+    default: Role.USER,
+  })
+  role: Role;
   // 데이터 생성 일자
   // 데이터 생성되는 날짜와 시간이 자동으로 찍힌다.
   @CreateDateColumn()
@@ -46,4 +58,4 @@ export class UserModel {
   @Column()
   @Generated('uuid')
   additionalId: string;
-}
+} //

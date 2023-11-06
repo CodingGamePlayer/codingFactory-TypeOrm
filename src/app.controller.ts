@@ -2,7 +2,7 @@ import { Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { AppService } from './app.service';
 import { In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserModel } from './entity/user.entity';
+import { Role, UserModel } from './entity/user.entity';
 
 @Controller()
 export class AppController {
@@ -15,7 +15,7 @@ export class AppController {
   @Post('users')
   postUser() {
     return this.userRepository.save({
-      title: 'test title',
+      role: Role.ADMIN,
     });
   }
 
