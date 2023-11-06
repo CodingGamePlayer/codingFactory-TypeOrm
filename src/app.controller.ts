@@ -1,6 +1,19 @@
 import { Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { AppService } from './app.service';
-import { In, Repository } from 'typeorm';
+import {
+  Between,
+  Equal,
+  ILike,
+  In,
+  IsNull,
+  LessThan,
+  LessThanOrEqual,
+  Like,
+  MoreThan,
+  MoreThanOrEqual,
+  Not,
+  Repository,
+} from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Role, UserModel } from './entity/user.entity';
 import { ProfileModel } from './entity/profile.entity';
@@ -23,56 +36,40 @@ export class AppController {
 
   @Post('users')
   postUser() {
-    return this.userRepository.save({
-      email: '1234@gmail.com',
-    });
+    for (let i = 0; i < 100; i++) {
+      this.userRepository.save({
+        email: `user-${i}@google.com`,
+      });
+    }
   }
 
   @Get('users')
   getUsers() {
     return this.userRepository.find({
-      // 어떤 프로퍼티를 가져올지 설정한다.
-      // 기본은 모든 프로퍼티를 가져온다.
-      // 만약에 select: ['id', 'email'] 이렇게 설정하면
-      // id와 email만 가져온다.
-      select: {
-        id: true,
-        createdAt: true,
-        updatedAt: true,
-        version: true,
-        profile: {
-          id: true,
-        },
+      where: {
+        // // 아닌 경우 가져오기
+        // id: Not(1),
+        // 적은 경우
+        // id: LessThan(30),
+        // 적거나 같은 경우
+        // id: LessThanOrEqual(30),
+        // 더 큰 경유
+        // id: MoreThan(30),
+        // 더 크거나 같은 경우
+        // id: MoreThanOrEqual(30),
+        // 같은 경우
+        // id: Equal(30),
+        // 유사값
+        // email: Like('%google%'),
+        // 대문자 소문자 구분 하지 않음
+        // email: ILike('%GOOGLE%'),
+        // 사이값
+        // id: Between(1, 10),
+        // 해당되는 여러개의 값
+        // id: In([1, 2, 3, 4, 5]),
+        // is null
+        id: IsNull(),
       },
-
-      // 필터링할 조건을 들고올 때 사용
-      // AND 조건으로 인식
-      // where: {
-      //   profile: { id: 3 },
-      // },
-
-      // OR 조건으로 인식
-      // where: [
-      //   {
-      //     version: 1,
-      //   },
-      //   {
-      //     id: 3,
-      //   },
-      // ],
-
-      // 관계를 가져올 때 사용한다.
-      // relations를 사용하면 select와 where에서도 적용가능
-      relations: {
-        profile: true,
-      },
-
-      order: {
-        id: 'DESC',
-      },
-
-      skip: 0,
-      take: 2,
     });
   }
 
