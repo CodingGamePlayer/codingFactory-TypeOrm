@@ -67,7 +67,21 @@ export class UserModel {
   @Generated('uuid')
   additionalId: string;
 
-  @OneToOne(() => ProfileModel, (profile) => profile.user)
+  @OneToOne(() => ProfileModel, (profile) => profile.user, {
+    // find() 실행시 자동으로 profile을 eager하게 가져온다.
+    eager: true,
+    // 저장할때 realtion을 한번에 같이 저장가능
+    cascade: true,
+    // null이 가능한지
+    nullable: true,
+    // 과계가 삭제됐을때
+    // no action: 아무것도 하지 않는다.
+    // cascade: 같이 삭제한다.
+    // set null: null로 설정한다.
+    // set default: default 값으로 설정한다.
+    // restrict: 삭제를 막는다.
+    onDelete: 'RESTRICT',
+  })
   @JoinColumn()
   profile: ProfileModel;
 
