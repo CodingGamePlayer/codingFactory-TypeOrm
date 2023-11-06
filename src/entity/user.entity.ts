@@ -18,7 +18,16 @@ export class UserModel {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({
+    type: 'varchar',
+    name: 'title',
+    length: 30,
+    nullable: true,
+    update: false,
+    select: false,
+    default: 'default value',
+    unique: false,
+  })
   title: string;
 
   // 데이터 생성 일자
