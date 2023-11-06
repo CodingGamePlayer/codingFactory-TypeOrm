@@ -69,7 +69,7 @@ export class UserModel {
 
   @OneToOne(() => ProfileModel, (profile) => profile.user, {
     // find() 실행시 자동으로 profile을 eager하게 가져온다.
-    eager: true,
+    eager: false,
     // 저장할때 realtion을 한번에 같이 저장가능
     cascade: true,
     // null이 가능한지

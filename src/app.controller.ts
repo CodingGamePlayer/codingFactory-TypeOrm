@@ -24,13 +24,56 @@ export class AppController {
   @Post('users')
   postUser() {
     return this.userRepository.save({
-      role: Role.ADMIN,
+      email: '1234@gmail.com',
     });
   }
 
   @Get('users')
   getUsers() {
-    return this.userRepository.find({});
+    return this.userRepository.find({
+      // 어떤 프로퍼티를 가져올지 설정한다.
+      // 기본은 모든 프로퍼티를 가져온다.
+      // 만약에 select: ['id', 'email'] 이렇게 설정하면
+      // id와 email만 가져온다.
+      select: {
+        id: true,
+        createdAt: true,
+        updatedAt: true,
+        version: true,
+        profile: {
+          id: true,
+        },
+      },
+
+      // 필터링할 조건을 들고올 때 사용
+      // AND 조건으로 인식
+      // where: {
+      //   profile: { id: 3 },
+      // },
+
+      // OR 조건으로 인식
+      // where: [
+      //   {
+      //     version: 1,
+      //   },
+      //   {
+      //     id: 3,
+      //   },
+      // ],
+
+      // 관계를 가져올 때 사용한다.
+      // relations를 사용하면 select와 where에서도 적용가능
+      relations: {
+        profile: true,
+      },
+
+      order: {
+        id: 'DESC',
+      },
+
+      skip: 0,
+      take: 2,
+    });
   }
 
   @Patch('users/:id')
@@ -41,6 +84,7 @@ export class AppController {
 
     return this.userRepository.save({
       ...user,
+      email: user.email + '0',
     });
   }
 
